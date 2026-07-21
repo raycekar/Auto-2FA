@@ -1,12 +1,12 @@
 export default defineContentScript({
-    matches: ["https://*.duosecurity.com/frame/*/auth/prompt*", "https://*.duosecurity.com/frame/prompt*"],
+    matches: ["https://*.duosecurity.com/prompt/*", "https://*.duosecurity.com/frame/*/auth/prompt*", "https://*.duosecurity.com/frame/prompt*",],
     main() {
         // Notify the service worker we are on a login page
         function notify() {
             browser.runtime.sendMessage({
                 intent: "onLoginPage", params: {
-                    // If a verification code exists on this page, this will notify the extension
-                    verificationCode: document.querySelector(".verification-code")?.innerText
+                    // If a verification code exists on this page, this will notify the extension.
+                    verificationCode: document.querySelector(".code-text")?.innerText.replace(/\D/g, "")
                 }
             });
         };
