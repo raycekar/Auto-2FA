@@ -23,13 +23,18 @@ export default defineConfig({
       version: "1.6.5",
       permissions: ["storage", "activeTab", "scripting"],
       host_permissions: ["https://*.duosecurity.com/*"],
-      // Specific to firefox during dev
-      ...(browser === "firefox" &&
-        mode === "development" && {
-          browser_specific_settings: {
-            gecko: { id: "extensionname@example.org", strict_min_version: "88.0" },
+      // Firefox needs a stable add-on id for signing, and (for new or updated
+      // AMO listings) a data_collection_permissions declaration. Auto 2FA
+      // collects no user data, so we declare "none".
+      ...(browser === "firefox" && {
+        browser_specific_settings: {
+          gecko: {
+            id: "auto-2fa@raycekar.github.io",
+            strict_min_version: "88.0",
+            data_collection_permissions: { required: ["none"] },
           },
-        }),
+        },
+      }),
     };
   },
 });
